@@ -4,6 +4,13 @@
 
 O **AppCarSales** é uma aplicação de gerenciamento de vendas de veículos desenvolvida com **Quarkus**. O sistema permite o cadastro e atualização de veículos, além de gerenciar todo o processo de vendas, desde a reserva até a confirmação do pagamento.
 
+## Link para o vídeo demonstrando a aplicação
+https://youtu.be/04JYQGnrpPY
+
+## Arquitetura da Aplicação
+
+![img.png](img.png)
+
 ## Tecnologias Utilizadas
 
 - **Java 21** - Linguagem de programação
