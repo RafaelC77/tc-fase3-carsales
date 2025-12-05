@@ -100,19 +100,3 @@ docker run -i --rm -p 8080:8080 \
 |--------|----------|-----------|
 | POST | `/sales` | Cria uma nova venda (reserva o veículo) |
 | PATCH | `/sales/{saleId}` | Confirma o pagamento da venda |
-
-## 🔧 Configuração
-
-### Variáveis de Ambiente
-
-Você pode configurar a aplicação através de variáveis de ambiente:
-
-```bash
-QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://localhost:3306/carsales_db
-QUARKUS_DATASOURCE_USERNAME=carsales_user
-QUARKUS_DATASOURCE_PASSWORD=carsales_password
-QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=update
-QUARKUS_HIBERNATE_ORM_LOG_SQL=true
-```
-
-
