@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import tech.challenge.dtos.CreateSaleRequestDTO;
 import tech.challenge.entities.SaleEntity;
 import tech.challenge.services.SaleService;
 
@@ -18,12 +19,17 @@ public class SaleController {
 
     @POST
     @Transactional
-    public Response createSale(SaleEntity sale) {
+    public Response createSale(CreateSaleRequestDTO requestDTO) {
         try {
-            SaleEntity newSale = saleService.createSale(sale);
-            return Response.status(Response.Status.CREATED)
-                    .entity(newSale)
-                    .build();
+            SaleEntity newSale = saleService.createSale(requestDTO);
+            if (newSale != null) {
+                return Response.status(Response.Status.CREATED)
+                        .entity(newSale)
+                        .build();
+            } else {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("Carro não disponível para venda").build();
+            }
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
                     .entity("Erro ao criar venda: " + e.getMessage()).build();

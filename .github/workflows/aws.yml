@@ -1,12 +1,12 @@
 name: Deploy to ECS
 
-#on:
-#  push:
-#    branches: ["main"]
-#  pull_request:
-#    branches: ["main"]
-#
-#  workflow_dispatch:
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+  workflow_dispatch:
 
 env:
   AWS_REGION: us-east-1                   # set this to your preferred AWS region, e.g. us-west-1

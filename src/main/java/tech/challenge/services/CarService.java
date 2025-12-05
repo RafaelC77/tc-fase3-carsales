@@ -2,6 +2,7 @@ package tech.challenge.services;
 
 import io.quarkus.panache.common.Sort;
 import jakarta.enterprise.context.ApplicationScoped;
+import tech.challenge.dtos.CreateCarRequestDTO;
 import tech.challenge.entities.CarEntity;
 import tech.challenge.enums.CarStatus;
 
@@ -10,7 +11,14 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class CarService {
-    public CarEntity createCar(CarEntity carEntity) {
+    public CarEntity createCar(CreateCarRequestDTO dto) {
+        CarEntity carEntity = new CarEntity();
+        carEntity.setModel(dto.getModel());
+        carEntity.setBrand(dto.getBrand());
+        carEntity.setYear(dto.getYear());
+        carEntity.setColor(dto.getColor());
+        carEntity.setPrice(dto.getPrice());
+        carEntity.setStatus(CarStatus.AVAILABLE);
 
         CarEntity.persist(carEntity);
 

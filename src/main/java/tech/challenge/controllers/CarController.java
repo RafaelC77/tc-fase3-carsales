@@ -5,6 +5,7 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import tech.challenge.dtos.CreateCarRequestDTO;
 import tech.challenge.entities.CarEntity;
 import tech.challenge.services.CarService;
 
@@ -20,9 +21,9 @@ public class CarController {
 
     @POST
     @Transactional
-    public Response createCar(CarEntity carEntity) {
+    public Response createCar(CreateCarRequestDTO requestDTO) {
         try {
-            CarEntity createdCar = carService.createCar(carEntity);
+            CarEntity createdCar = carService.createCar(requestDTO);
             return Response.status(Response.Status.CREATED).entity(createdCar).build();
         } catch (Exception e) {
             return Response.status(Response.Status.BAD_REQUEST)
