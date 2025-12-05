@@ -1,61 +1,118 @@
-# appcarsales
+# AppCarSales
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## 📋 Sobre o Projeto
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+O **AppCarSales** é uma aplicação de gerenciamento de vendas de veículos desenvolvida com **Quarkus**. O sistema permite o cadastro e atualização de veículos, além de gerenciar todo o processo de vendas, desde a reserva até a confirmação do pagamento.
 
-## Running the application in dev mode
+## Tecnologias Utilizadas
 
-You can run your application in dev mode that enables live coding using:
+- **Java 21** - Linguagem de programação
+- **Quarkus 3.30.1** - Framework principal
+- **Hibernate ORM com Panache** - Persistência de dados
+- **MySQL** - Banco de dados relacional
+- **Lombok** - Redução de boilerplate code
+- **SmallRye OpenAPI** - Documentação de API
+- **SmallRye Health** - Health checks
+- **Jakarta REST (JAX-RS)** - API REST
+- **Jackson** - Serialização JSON
 
-```shell script
+### Estrutura do Projeto
+
+```
+src/main/java/tech/challenge/
+├── controllers/          # Endpoints REST
+│   ├── CarController.java
+│   └── SaleController.java
+├── entities/            # Entidades JPA
+│   ├── CarEntity.java
+│   └── SaleEntity.java
+├── services/            # Lógica de negócio
+│   ├── CarService.java
+│   └── SaleService.java
+├── enums/               # Enumerações
+│   ├── CarStatus.java
+│   └── PaymentStatus.java
+└── healthcheck/         # Health checks
+    └── DatabaseHealthCheck.java
+```
+
+## Como Rodar Localmente
+
+
+1. Clone o repositório:
+
+```bash
+git clone <url-do-repositorio>
+cd appcarsales
+```
+
+2. Execute a aplicação em modo dev:
+
+```bash
 ./mvnw quarkus:dev
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+A aplicação estará disponível em:
+- **API**: http://localhost:8080
+- **Swagger UI**: http://localhost:8080/q/swagger-ui
+- **Dev UI**: http://localhost:8080/q/dev
+- **Health Check**: http://localhost:8080/q/health
 
-## Packaging and running the application
+### Executando com Docker
 
-The application can be packaged using:
+1. Compile o projeto:
 
-```shell script
+```bash
 ./mvnw package
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+2. Construa a imagem Docker:
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
-
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+```bash
+docker build -f src/main/docker/Dockerfile.jvm -t appcarsales:latest .
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+3. Execute o container (ajuste as variáveis de ambiente conforme necessário):
 
-## Creating a native executable
-
-You can create a native executable using:
-
-```shell script
-./mvnw package -Dnative
+```bash
+docker run -i --rm -p 8080:8080 \
+  -e QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://host.docker.internal:3306/carsales_db \
+  -e QUARKUS_DATASOURCE_USERNAME=carsales_user \
+  -e QUARKUS_DATASOURCE_PASSWORD=carsales_password \
+  appcarsales:latest
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
+## 📊 API Endpoints
+
+### Veículos (`/cars`)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/cars` | Cadastra um novo veículo |
+| PUT | `/cars/{carId}` | Atualiza dados de um veículo disponível |
+| GET | `/cars/available` | Lista veículos disponíveis (ordenados por preço) |
+| GET | `/cars/sold` | Lista veículos vendidos (ordenados por preço) |
+
+### Vendas (`/sales`)
+
+| Método | Endpoint | Descrição |
+|--------|----------|-----------|
+| POST | `/sales` | Cria uma nova venda (reserva o veículo) |
+| PATCH | `/sales/{saleId}` | Confirma o pagamento da venda |
+
+## 🔧 Configuração
+
+### Variáveis de Ambiente
+
+Você pode configurar a aplicação através de variáveis de ambiente:
+
+```bash
+QUARKUS_DATASOURCE_JDBC_URL=jdbc:mysql://localhost:3306/carsales_db
+QUARKUS_DATASOURCE_USERNAME=carsales_user
+QUARKUS_DATASOURCE_PASSWORD=carsales_password
+QUARKUS_HIBERNATE_ORM_DATABASE_GENERATION=update
+QUARKUS_HIBERNATE_ORM_LOG_SQL=true
 ```
 
-You can then execute your native executable with: `./target/appcarsales-1.0.0-SNAPSHOT-runner`
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Hibernate ORM with Panache ([guide](https://quarkus.io/guides/hibernate-orm-panache)): Simplify your persistence code for Hibernate ORM via the active record or the repository pattern
-- JDBC Driver - MySQL ([guide](https://quarkus.io/guides/datasource)): Connect to the MySQL database via JDBC
